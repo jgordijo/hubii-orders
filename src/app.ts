@@ -12,6 +12,7 @@ import {
   hasZodFastifySchemaValidationErrors,
   isResponseSerializationError,
 } from 'fastify-type-provider-zod';
+import { customersRoutes } from './routes/customers';
 import { helloWorldRoute } from './routes/hello-world-route';
 
 const app = fastify({
@@ -98,5 +99,6 @@ app.register(fastifySwaggerUi, {
 });
 
 app.register(helloWorldRoute);
+app.register(customersRoutes);
 
 export { app };
