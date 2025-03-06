@@ -1,18 +1,7 @@
 import { fakerPT_BR as faker } from '@faker-js/faker';
 import { OrderStatus, Prisma, PrismaClient } from '@prisma/client';
 
-const zipCodes = [
-  '01000000',
-  '20000000',
-  '30100000',
-  '40000000',
-  '80000000',
-  '90000000',
-  '50000000',
-  '60000000',
-  '69000000',
-  '66000000',
-];
+const zipCodes = ['01310100', '22041001', '30112010', '40140110', '80510190'];
 
 const prisma = new PrismaClient();
 
