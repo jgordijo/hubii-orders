@@ -1,3 +1,4 @@
+import type { Customers } from '@prisma/client';
 import { prisma } from '../../../src/infra/prisma/client';
 import { customersRepository } from '../../../src/infra/repositories/customers-repository';
 
@@ -222,6 +223,34 @@ describe('customersRepository', () => {
       ]);
 
       expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('getCustiberById', () => {
+    it('should successfully get a customer by id', async () => {
+      const customerId = '2a0e2527-2f90-4b9d-9d71-3b9e12f074dc';
+
+      const customer = {
+        id: '2a0e2527-2f90-4b9d-9d71-3b9e12f074dc',
+        name: 'John Doe',
+        email: 'john.doe@gmail.com',
+        zipCode: '20000000',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      (prisma.customers.findUnique as jest.Mock).mockResolvedValueOnce(
+        customer as Customers
+      );
+
+      await customersRepository.getCustomerById(customerId);
+
+      expect(prisma.customers.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: customerId,
+        },
+      });
+
+      expect(prisma.customers.findUnique).toHaveBeenCalledTimes(1);
     });
   });
 });

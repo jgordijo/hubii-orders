@@ -43,4 +43,11 @@ export const customersRepository = {
 
     return { customers, count };
   },
+  getCustomerById: async (customerId: string) => {
+    return await prisma.customers.findUnique({
+      where: {
+        id: customerId,
+      },
+    });
+  },
 };

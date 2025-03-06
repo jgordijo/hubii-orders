@@ -14,6 +14,7 @@ import {
 } from 'fastify-type-provider-zod';
 import { customersRoutes } from './routes/customers';
 import { helloWorldRoute } from './routes/hello-world-route';
+import { orderRoutes } from './routes/orders';
 
 const app = fastify({
   logger: {
@@ -100,5 +101,6 @@ app.register(fastifySwaggerUi, {
 
 app.register(helloWorldRoute);
 app.register(customersRoutes);
+app.register(orderRoutes);
 
 export { app };
