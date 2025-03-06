@@ -31,3 +31,7 @@ export interface updateOrderParams {
   orderId: string;
   data: Partial<Orders>;
 }
+
+export interface getOrderParams {
+  orderId: string;
+}

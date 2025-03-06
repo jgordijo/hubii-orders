@@ -89,7 +89,7 @@ describe('ordersRepository', () => {
     });
   });
   describe('updateOrder', () => {
-    it('should successfully get a customer by id', async () => {
+    it('should successfully update an order', async () => {
       const orderId = '2a0e2527-2f90-4b9d-9d71-3b9e12f074dc';
 
       const data = {
@@ -120,6 +120,65 @@ describe('ordersRepository', () => {
       });
 
       expect(prisma.orders.update).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('getOrder', () => {
+    it('should successfully retrieve an order', async () => {
+      const orderId = '2a0e2527-2f90-4b9d-9d71-3b9e12f074dc';
+
+      const order = {
+        id: '2a0e2527-2f90-4b9d-9d71-3b9e12f074dc',
+        name: 'John Doe',
+        email: 'john.doe@gmail.com',
+        zipCode: '20000000',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        OrderItems: [
+          {
+            productId: '3b43a917-3f15-46d3-83d7-6ac2d9c11250',
+            productName: 'Ração Canina Adulto 7.5kg',
+            price: '439.99',
+            quantity: 1,
+          },
+          {
+            productId: '4b756380-8d67-4e9d-981d-ac0d439960a7',
+            productName: 'Sorvete Cone',
+            price: '14.99',
+            quantity: 1,
+          },
+        ],
+      };
+
+      (prisma.orders.findUnique as jest.Mock).mockResolvedValueOnce(order);
+
+      const result = await ordersRepository.getOrder({ orderId });
+
+      expect(result).toStrictEqual(order);
+
+      expect(prisma.orders.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: orderId,
+        },
+        select: {
+          id: true,
+          customerId: true,
+          total: true,
+          shippingPrice: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+          OrderItems: {
+            select: {
+              productId: true,
+              productName: true,
+              price: true,
+              quantity: true,
+            },
+          },
+        },
+      });
+
+      expect(prisma.orders.findUnique).toHaveBeenCalledTimes(1);
     });
   });
 });
