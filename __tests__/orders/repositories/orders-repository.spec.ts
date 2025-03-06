@@ -181,4 +181,196 @@ describe('ordersRepository', () => {
       expect(prisma.orders.findUnique).toHaveBeenCalledTimes(1);
     });
   });
+  describe('getOrders', () => {
+    it('should successfully get orders list', async () => {
+      const list = [
+        {
+          id: '0b65acba-0184-4d39-bb38-54c1ad112388',
+          customerId: '05b18a89-857f-41ec-8905-12d44378b85f',
+          total: '478.48',
+          shippingPrice: '20',
+          status: OrderStatus.CONFIRMED,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      const countResult = 1;
+
+      (prisma.$transaction as jest.Mock).mockResolvedValueOnce([
+        list,
+        countResult,
+      ]);
+
+      const result = await ordersRepository.getOrders({
+        page: 1,
+        pageSize: 5,
+      });
+
+      expect(result).toStrictEqual({ orders: list, count: countResult });
+
+      expect(prisma.$transaction).toHaveBeenCalledWith([
+        prisma.orders.findMany({
+          select: {
+            id: true,
+            customerId: true,
+            total: true,
+            shippingPrice: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          where: {},
+          take: 5,
+          skip: 1,
+        }),
+        prisma.orders.count({ where: {} }),
+      ]);
+
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    });
+    it('should successfully get orders list and filter by customerId', async () => {
+      const customerId = '05b18a89-857f-41ec-8905-12d44378b85f';
+
+      const list = [
+        {
+          id: '0b65acba-0184-4d39-bb38-54c1ad112388',
+          customerId: '05b18a89-857f-41ec-8905-12d44378b85f',
+          total: '478.48',
+          shippingPrice: '20',
+          status: OrderStatus.CONFIRMED,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      const countResult = 1;
+
+      (prisma.$transaction as jest.Mock).mockResolvedValueOnce([
+        list,
+        countResult,
+      ]);
+
+      const result = await ordersRepository.getOrders({
+        page: 1,
+        pageSize: 5,
+        customerId,
+      });
+
+      expect(result).toStrictEqual({ orders: list, count: countResult });
+
+      expect(prisma.$transaction).toHaveBeenCalledWith([
+        prisma.orders.findMany({
+          select: {
+            id: true,
+            customerId: true,
+            total: true,
+            shippingPrice: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          where: { customerId },
+          take: 5,
+          skip: 1,
+        }),
+        prisma.orders.count({ where: { customerId } }),
+      ]);
+
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    });
+    it('should successfully get orders list and filter by status', async () => {
+      const status = OrderStatus.CONFIRMED;
+
+      const list = [
+        {
+          id: '0b65acba-0184-4d39-bb38-54c1ad112388',
+          customerId: '05b18a89-857f-41ec-8905-12d44378b85f',
+          total: '478.48',
+          shippingPrice: '20',
+          status: OrderStatus.CONFIRMED,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+      const countResult = 1;
+
+      (prisma.$transaction as jest.Mock).mockResolvedValueOnce([
+        list,
+        countResult,
+      ]);
+
+      const result = await ordersRepository.getOrders({
+        page: 1,
+        pageSize: 5,
+        status,
+      });
+
+      expect(result).toStrictEqual({ orders: list, count: countResult });
+
+      expect(prisma.$transaction).toHaveBeenCalledWith([
+        prisma.orders.findMany({
+          select: {
+            id: true,
+            customerId: true,
+            total: true,
+            shippingPrice: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          where: { status },
+          take: 5,
+          skip: 1,
+        }),
+        prisma.orders.count({ where: { status } }),
+      ]);
+
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    });
+    it('should successfully get orders list with default pagination params', async () => {
+      const list = [
+        {
+          id: '0b65acba-0184-4d39-bb38-54c1ad112388',
+          customerId: '05b18a89-857f-41ec-8905-12d44378b85f',
+          total: '478.48',
+          shippingPrice: '20',
+          status: OrderStatus.CONFIRMED,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      const countResult = 1;
+
+      (prisma.$transaction as jest.Mock).mockResolvedValueOnce([
+        list,
+        countResult,
+      ]);
+
+      const result = await ordersRepository.getOrders({});
+
+      expect(result).toStrictEqual({ orders: list, count: countResult });
+
+      expect(prisma.$transaction).toHaveBeenCalledWith([
+        prisma.orders.findMany({
+          select: {
+            id: true,
+            customerId: true,
+            total: true,
+            shippingPrice: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          where: {},
+          take: 5,
+          skip: 1,
+        }),
+        prisma.orders.count({ where: {} }),
+      ]);
+
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    });
+  });
 });

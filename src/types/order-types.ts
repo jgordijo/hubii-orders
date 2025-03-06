@@ -1,4 +1,4 @@
-import type { Orders } from '@prisma/client';
+import type { OrderStatus, Orders } from '@prisma/client';
 
 export interface createOrderRepositoryParams {
   customerId: string;
@@ -34,4 +34,16 @@ export interface updateOrderParams {
 
 export interface getOrderParams {
   orderId: string;
+}
+
+export interface getOrdersParams {
+  page?: number;
+  pageSize?: number;
+  status?: OrderStatus;
+  customerId?: string;
+}
+
+export interface getOrdersFilterParams {
+  customerId?: string;
+  status?: OrderStatus;
 }
