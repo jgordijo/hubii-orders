@@ -89,7 +89,6 @@ curl --request POST \
 ## 📁 File Tree Structure
 
 ```bash
-```
 └── 📁hubii-orders
     └── 📁__tests__
         └── 📁customers
