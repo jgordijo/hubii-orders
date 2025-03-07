@@ -15,3 +15,11 @@ export interface getCustomersFilterParams {
     mode?: 'insensitive';
   };
 }
+
+export interface getCustomerShippingParams {
+  customerId: string;
+}
+
+export interface getCustomerShippingMelhorEnvioParams {
+  customerZipCode: string;
+}

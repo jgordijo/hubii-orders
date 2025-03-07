@@ -36,6 +36,7 @@ describe('POST /orders', () => {
       items: [
         { productId: '42b1cce9-e2e7-48ec-a045-c8c6b8637b63', quantity: 2 },
       ],
+      shippingMethod: 'sedex',
     };
 
     (createOrder as jest.Mock).mockResolvedValue(createOrderResponse);
@@ -69,7 +70,12 @@ describe('POST /orders', () => {
     });
 
     expect(response.statusCode).toBe(400);
-    expect(response.json()).toHaveProperty('error', 'Bad Request');
-    expect(response.json()).toHaveProperty('message');
+    expect(response.json()).toStrictEqual({
+      statusCode: 400,
+      error: 'Bad Request',
+      code: 'FST_ERR_VALIDATION',
+      message:
+        'body/customerId Invalid uuid, body/shippingMethod Required, body/items/0/productId Invalid uuid, body/items/0/quantity Number must be greater than 0',
+    });
   });
 });

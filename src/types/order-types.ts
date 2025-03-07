@@ -18,6 +18,7 @@ export interface createOrderParams {
     productId: string;
     quantity: number;
   }[];
+  shippingMethod: 'pac' | 'sedex' | 'dotPackage' | 'dotCom' | 'expresso';
 }
 
 export interface orderItems {

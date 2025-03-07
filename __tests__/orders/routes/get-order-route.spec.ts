@@ -67,11 +67,11 @@ describe('GET /orders/:orderId', () => {
     });
 
     expect(response.statusCode).toBe(404);
-    expect(response.json()).toHaveProperty('statusCode', 404);
-    expect(response.json()).toHaveProperty('code', 'NOT_FOUND');
-    expect(response.json()).toHaveProperty(
-      'message',
-      'Order 2a0e2527-2f90-4b9d-9d71-3b9e12f074dc not found'
-    );
+    expect(response.json()).toStrictEqual({
+      statusCode: 404,
+      error: 'Resource not found',
+      code: 'NOT_FOUND',
+      message: 'Order 2a0e2527-2f90-4b9d-9d71-3b9e12f074dc not found',
+    });
   });
 });

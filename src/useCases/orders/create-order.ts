@@ -7,9 +7,14 @@ import {
   type updateProductStockBody,
 } from '../../types/products-type';
 import { calculateItemsPrice } from '../../utils/calculate-items-price';
+import { calculateShipping } from '../../utils/calculate-shipping';
 import { productsClient } from '../../utils/products-client';
 
-export async function createOrder({ customerId, items }: createOrderParams) {
+export async function createOrder({
+  customerId,
+  items,
+  shippingMethod,
+}: createOrderParams) {
   const customer = await customersRepository.getCustomerById(customerId);
 
   if (!customer) throw new Error('Customer not found');
@@ -28,7 +33,15 @@ export async function createOrder({ customerId, items }: createOrderParams) {
 
   const itemsPrice = calculateItemsPrice(orderItems);
 
-  const shippingPrice = '20.00'; //Shipping calculator will be implemented soon
+  const shippingInfo = await calculateShipping({ customer });
+
+  const shippingPrice = String(
+    Number.parseFloat(String(shippingInfo[shippingMethod]))
+  );
+
+  if (!shippingPrice || Number.isNaN(Number(shippingPrice))) {
+    throw new Error('Shipping method invalid for this customer location');
+  }
 
   const total = Number.parseFloat(shippingPrice) + itemsPrice;
 

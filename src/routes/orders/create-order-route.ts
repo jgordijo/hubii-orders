@@ -12,6 +12,13 @@ export const createOrderRoute: FastifyPluginAsyncZod = async app => {
         tags: ['orders'],
         body: z.object({
           customerId: z.string().uuid(),
+          shippingMethod: z.enum([
+            'pac',
+            'sedex',
+            'dotPackage',
+            'dotCom',
+            'expresso',
+          ]),
           items: z
             .object({
               productId: z.string().uuid(),
@@ -47,11 +54,12 @@ export const createOrderRoute: FastifyPluginAsyncZod = async app => {
       },
     },
     async request => {
-      const { customerId, items } = request.body;
+      const { customerId, items, shippingMethod } = request.body;
 
       const { order } = await createOrder({
         customerId,
         items,
+        shippingMethod,
       });
 
       return { order };
