@@ -37,7 +37,8 @@
 - Run `docker compose up -d`.
 - Run `npx prisma migrate dev` to run the database migrations and seed the DB with sample customers, since there's no endpoint for creating customers.
 - Optionally, if you also want to populate with some example orders (with IDs that does not exists on products API) you can uncomment the code on `seed.ts` and run `npx prisma db seed`.
-- Start the service running `npm run dev`. The service will run on port 3334 by default.
+- Start the service running `npm run start`. The service will run on port 3333 by default.
+- You can also run the server using `npm run dev`. Running that way will watch changes and automatically restart the server.
 - You can run `npx prisma studio` to see the database records directly through your browser at `http://localhost:5555`
 
 ## 📖 API Usage
